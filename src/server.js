@@ -18,7 +18,8 @@ const app = express();
 const port = Number(process.env.PORT || 3001);
 const host = process.env.HOST || "0.0.0.0";
 
-const allowedOrigins = (process.env.CORS_ORIGIN || "http://localhost:5173" || "https://lucas-graham.github.io")
+// Default allowed origins include local dev and GitHub Pages; override with CORS_ORIGIN env var
+const allowedOrigins = (process.env.CORS_ORIGIN || "http://localhost:5173,https://lucas-graham.github.io")
   .split(",")
   .map((origin) => origin.trim())
   .filter(Boolean);
@@ -40,6 +41,9 @@ app.use(
       callback(new Error("Not allowed by CORS"));
     },
     credentials: false,
+    methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    optionsSuccessStatus: 200,
   }),
 );
 
